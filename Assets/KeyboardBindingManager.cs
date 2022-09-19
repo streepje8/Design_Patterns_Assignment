@@ -8,8 +8,9 @@ public class KeyboardBindingManager : MonoBehaviour
 {
     public List<InputCommand> allCommands = new List<InputCommand>()
     {
-        new InputCommand("BlueNote", () => { Debug.Log("BlueNote"); }),
-        new InputCommand("RedNote", () => { Debug.Log("RedNote"); })
+        new InputCommand("BlueNote", () => GameController.Instance.BlueKey()),
+        new InputCommand("RedNote", () => GameController.Instance.RedKey()),
+        new InputCommand("PrintRecording", () => GameController.Instance.PrintKey())
     };
     private List<InputCommand> rebindQueue = new List<InputCommand>();
     private InputHandler handler;
@@ -43,8 +44,9 @@ public class KeyboardBindingManager : MonoBehaviour
             {
                 if (Input.anyKeyDown)
                 {
-                    char key = Input.inputString[Input.inputString.Length - 1];
-                    KeyCode code = (KeyCode)Enum.Parse(typeof(KeyCode), key.ToString().ToUpper());
+                    string key = Input.inputString[Input.inputString.Length - 1].ToString().ToUpper();
+                    if (key.Equals("R", StringComparison.Ordinal)) return;
+                    KeyCode code = (KeyCode)Enum.Parse(typeof(KeyCode), key);
                     handler.BindKey(code,rebindQueue[0]);
                     rebindQueue.RemoveAt(0);
                     if (rebindQueue.Count > 0)

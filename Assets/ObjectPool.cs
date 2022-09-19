@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class UnityObjectPool<T> : ObjectPool<T> where T : UnityEngine.Object
 {
@@ -39,7 +41,7 @@ public class ObjectPool<T>
 
     protected virtual T CreateInstance()
     {
-        return default(T);
+        return (T)Activator.CreateInstance(typeof(T));
     }
     
     public void FreeInstance(T instance)
