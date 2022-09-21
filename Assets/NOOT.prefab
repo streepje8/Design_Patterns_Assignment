@@ -96,4 +96,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
-  hitDistance: 0.5
+  hitDistance: 1

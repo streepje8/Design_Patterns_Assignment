@@ -153,13 +153,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d146b83354b5f743a6154c58067a86b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
-  hitNotes: []
-  notePrefab: {fileID: 7573774940468296298, guid: ea71102ff56889b46aa5f4b8a1cf1575, type: 3}
   level: {fileID: 4900000, guid: 6febde82f83d44b40929f41bf846b1cb, type: 3}
   isRecording: 0
-  scoretext: {fileID: 1691588469}
   notespeed: 8
+  notePrefab: {fileID: 7573774940468296298, guid: ea71102ff56889b46aa5f4b8a1cf1575, type: 3}
+  hitNotes: []
+  score: 0
+  scoretext: {fileID: 1691588469}
 --- !u!4 &259139182
 Transform:
   m_ObjectHideFlags: 0

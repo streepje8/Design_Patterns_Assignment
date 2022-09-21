@@ -9,21 +9,23 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(AudioSource))]
 public class GameController : Singleton<GameController>
 {
-    public int score = 0;
-
-    public List<RuntimeNote> hitNotes = new List<RuntimeNote>();
-    public GameObject notePrefab;
-
+    //Settings
     public TextAsset level;
     public bool isRecording = false;
-    private string recordingString = "";
-    public TMP_Text scoretext;
-
     public float notespeed = 2f;
-
+    
+    //Pool and active notes
+    public GameObject notePrefab;
     public UnityObjectPool<GameObject> notes;
+    public List<RuntimeNote> hitNotes = new List<RuntimeNote>();
+    
+    //Score stuff
+    public int score = 0;
+    public TMP_Text scoretext;
+    
+    private string recordingString = "";
     private AudioSource source;
-    private float delay = 10f;
+    private float delay = 1f; //Give slow computers time to load
     private bool started = false;
     private List<LoadedNote> loadedNotes = new List<LoadedNote>();
     private void Awake()
@@ -45,8 +47,7 @@ public class GameController : Singleton<GameController>
 
         if (loadedNotes.Count > 0 && source.time > loadedNotes[0].time)
         {
-            RuntimeNote n = notes.GetInstance().GetComponent<RuntimeNote>();
-            n.Activate(loadedNotes[0].color);
+            notes.GetInstance().GetComponent<RuntimeNote>().Activate(loadedNotes[0].color);
             loadedNotes.RemoveAt(0);
         }
 
