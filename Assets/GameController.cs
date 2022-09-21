@@ -6,24 +6,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public struct levelnote
-{
-    public float time;
-    public bool color;
-
-    public levelnote(float time, bool color)
-    {
-        this.time = time;
-        this.color = color;
-    }
-}
-
 [RequireComponent(typeof(AudioSource))]
 public class GameController : Singleton<GameController>
 {
     public int score = 0;
 
-    public List<HitNote> hitNotes = new List<HitNote>();
+    public List<RuntimeNote> hitNotes = new List<RuntimeNote>();
     public GameObject notePrefab;
 
     public TextAsset level;
@@ -37,25 +25,13 @@ public class GameController : Singleton<GameController>
     private AudioSource source;
     private float delay = 10f;
     private bool started = false;
-    private List<levelnote> lnotes = new List<levelnote>();
+    private List<LoadedNote> loadedNotes = new List<LoadedNote>();
     private void Awake()
     {
         Instance = this;
+        loadedNotes = LevelLoader.LoadLevel(level.text, notespeed); //Load the level
         notes = new UnityObjectPool<GameObject>(notePrefab);
         source = GetComponent<AudioSource>();
-        foreach(string s in level.text.Split('\n'))
-        {
-            if (s.Length > 2)
-            {
-                string b = Regex.Replace(s, @"/s+", "");
-                string[] a = b.Split('/');
-                string c = Regex.Replace(a[1], "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
-                float time = float.Parse(a[0]) - (17f/notespeed);
-                if(time > 0.01f)
-                    lnotes.Add(new levelnote(time,
-                    c.Equals("BLUE", StringComparison.OrdinalIgnoreCase)));
-            }
-        }
     }
 
     private void Update()
@@ -67,11 +43,11 @@ public class GameController : Singleton<GameController>
             started = true;
         }
 
-        if (lnotes.Count > 0 && source.time > lnotes[0].time)
+        if (loadedNotes.Count > 0 && source.time > loadedNotes[0].time)
         {
-            HitNote n = notes.GetInstance().GetComponent<HitNote>();
-            n.Activate(lnotes[0].color);
-            lnotes.RemoveAt(0);
+            RuntimeNote n = notes.GetInstance().GetComponent<RuntimeNote>();
+            n.Activate(loadedNotes[0].color);
+            loadedNotes.RemoveAt(0);
         }
 
         scoretext.text = score.ToString();
@@ -80,24 +56,17 @@ public class GameController : Singleton<GameController>
 
     public void RedKey()
     {
-        foreach (var hitNote in hitNotes)
-        {
-            hitNote.KeyPress(false);
-        }
-        if(isRecording)recordingString += source.time + "/RED\n";
+        hitNotes.ForEach(x => x.KeyPress(false));
+        if(isRecording) recordingString += source.time + "/RED\n";
     }
 
     public void BlueKey()
     {
-        foreach (var hitNote in hitNotes)
-        {
-            hitNote.KeyPress(true);
-        }
-        if(isRecording)recordingString += source.time + "/BLUE\n";
+        hitNotes.ForEach(x => x.KeyPress(true));
+        if(isRecording) recordingString += source.time + "/BLUE\n";
     }
 
-    public void PrintKey()
-    {
-        Debug.Log(recordingString);
-    }
+    public void PrintRecordedData() => Debug.Log(recordingString);
 }
+
+

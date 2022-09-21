@@ -10,7 +10,7 @@ public class KeyboardBindingManager : MonoBehaviour
     {
         new InputCommand("BlueNote", () => GameController.Instance.BlueKey()),
         new InputCommand("RedNote", () => GameController.Instance.RedKey()),
-        new InputCommand("PrintRecording", () => GameController.Instance.PrintKey())
+        new InputCommand("PrintRecording", () => GameController.Instance.PrintRecordedData())
     };
     private List<InputCommand> rebindQueue = new List<InputCommand>();
     private InputHandler handler;

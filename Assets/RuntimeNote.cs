@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class HitNote : MonoBehaviour
+public class RuntimeNote : MonoBehaviour
 {
     public bool isActive = false;
     public float hitDistance = 0.5f;
